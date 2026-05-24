@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.kajdep/countrycallingcodesmcp",
+  "title": "Country Calling Codes",
+  "description": "Read-only MCP server for international country calling codes, ISO country codes, E.164 dial codes, regions, trunk prefixes, and NANP area-code disambiguation.",
+  "version": "1.0.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://countrycalling.codes/api/mcp"
+    }
+  ],
+  "_meta": {
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "website": "https://countrycalling.codes",
+      "llms": "https://countrycalling.codes/llms.txt",
+      "llmsFull": "https://countrycalling.codes/llms-full.md",
+      "skillManifest": "https://countrycalling.codes/skill.json",
+      "openapi": "https://countrycalling.codes/api/calling-codes/openapi.json",
+      "tools": [
+        "lookup_country_calling_code"
+      ],
+      "categories": [
+        "data",
+        "search",
+        "reference",
+        "api"
+      ]
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "countrycallingcodesmcp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Metadata-only submission repository for the hosted Country Calling Codes MCP server.",
+  "mcpName": "io.github.kajdep/countrycallingcodesmcp",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kajdep/countrycallingcodesmcp.git"
+  },
+  "homepage": "https://countrycalling.codes",
+  "license": "MIT"
+}

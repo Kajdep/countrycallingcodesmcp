@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "country-calling-codes": {
+      "url": "https://countrycalling.codes/api/mcp"
+    }
+  }
+}
