@@ -3,20 +3,9 @@
 Metadata-only listing repository for the hosted Country Calling Codes MCP
 server (service **1.4.0**).
 
-This repository does not contain the website, the MCP runtime, or an agent
-skill. Directories and the official MCP Registry use it to discover the public
-hosted endpoint. Implementation, skill instructions, and the dataset live in
-the repositories listed below — do not copy them here.
+T
 
-| Piece | Where it lives |
-| --- | --- |
-| Hosted REST API + MCP runtime | [Kajdep/v0-countrycallingcodes](https://github.com/Kajdep/v0-countrycallingcodes) |
-| This listing (`server.json`) | [Kajdep/countrycallingcodesmcp](https://github.com/Kajdep/countrycallingcodesmcp) |
 | Agent skill (`SKILL.md`) | [Kajdep/countrycalling-codes-skill](https://github.com/Kajdep/countrycalling-codes-skill) |
-
-`SKILL.md` belongs only in the skill repository. Skill registries index a
-public repo with that file at the root and cannot read this one. Keep this
-repo limited to registry metadata so the two listings do not compete.
 
 Official registry name: `io.github.Kajdep/countrycallingcodesmcp`.
 
