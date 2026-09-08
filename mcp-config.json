@@ -1,7 +1,8 @@
 {
   "mcpServers": {
     "country-calling-codes": {
-      "url": "https://countrycalling.codes/api/mcp"
+      "type": "streamable-http",
+      "url": "https://www.countrycalling.codes/api/mcp"
     }
   }
 }

@@ -1,30 +1,63 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.kajdep/countrycallingcodesmcp",
+  "name": "io.github.Kajdep/countrycallingcodesmcp",
   "title": "Country Calling Codes",
-  "description": "Read-only MCP server for international country calling codes, ISO country codes, E.164 dial codes, regions, trunk prefixes, and NANP area-code disambiguation.",
-  "version": "1.0.0",
+  "description": "Calling codes, phone analysis, dialing guidance, batch normalization and calling windows.",
+  "version": "1.4.0",
+  "websiteUrl": "https://www.countrycalling.codes/developers#mcp",
+  "repository": {
+    "url": "https://github.com/Kajdep/v0-countrycallingcodes",
+    "source": "github"
+  },
+  "icons": [
+    {
+      "src": "https://www.countrycalling.codes/icon-light-32x32.png",
+      "mimeType": "image/png",
+      "sizes": ["32x32"],
+      "theme": "light"
+    },
+    {
+      "src": "https://www.countrycalling.codes/icon-dark-32x32.png",
+      "mimeType": "image/png",
+      "sizes": ["32x32"],
+      "theme": "dark"
+    }
+  ],
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://countrycalling.codes/api/mcp"
+      "url": "https://www.countrycalling.codes/api/mcp"
     }
   ],
   "_meta": {
     "io.modelcontextprotocol.registry/publisher-provided": {
-      "website": "https://countrycalling.codes",
-      "llms": "https://countrycalling.codes/llms.txt",
-      "llmsFull": "https://countrycalling.codes/llms-full.md",
-      "skillManifest": "https://countrycalling.codes/skill.json",
-      "openapi": "https://countrycalling.codes/api/calling-codes/openapi.json",
+      "categories": ["data", "search", "reference", "api"],
+      "website": "https://www.countrycalling.codes",
+      "documentation": "https://www.countrycalling.codes/developers",
+      "llms": "https://www.countrycalling.codes/llms.txt",
+      "llmsFull": "https://www.countrycalling.codes/llms-full.md",
+      "openapi": "https://www.countrycalling.codes/api/calling-codes/openapi.json",
+      "skillManifest": "https://www.countrycalling.codes/skill.json",
+      "status": "https://www.countrycalling.codes/api/calling-codes/status",
+      "authentication": "none",
+      "readOnly": true,
       "tools": [
-        "lookup_country_calling_code"
+        "lookup_country_calling_code",
+        "format_international_phone_number",
+        "get_phone_capabilities",
+        "analyze_phone_number",
+        "get_dialing_instructions",
+        "normalize_phone_numbers",
+        "compare_phone_numbers",
+        "resolve_phone_region",
+        "get_phone_input_rules",
+        "diagnose_dialing_problem",
+        "find_calling_windows"
       ],
-      "categories": [
-        "data",
-        "search",
-        "reference",
-        "api"
+      "resources": [
+        "countrycalling://capabilities",
+        "countrycalling://coverage",
+        "countrycalling://countries/{code}/phone-input"
       ]
     }
   }

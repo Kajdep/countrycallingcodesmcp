@@ -1,44 +1,76 @@
 # Country Calling Codes MCP
 
-Metadata-only submission repository for the hosted Country Calling Codes MCP
-server.
+Metadata-only listing repository for the hosted Country Calling Codes MCP
+server (service **1.4.0**).
 
-This repository intentionally does not include the website source code or the
-full country calling-code dataset. It exists so MCP directories and registries
-can discover, inspect, and list the public hosted MCP endpoint.
+This repository does not contain the website, the MCP runtime, or an agent
+skill. Directories and the official MCP Registry use it to discover the public
+hosted endpoint. Implementation, skill instructions, and the dataset live in
+the repositories listed below — do not copy them here.
+
+| Piece | Where it lives |
+| --- | --- |
+| Hosted REST API + MCP runtime | [Kajdep/v0-countrycallingcodes](https://github.com/Kajdep/v0-countrycallingcodes) |
+| This listing (`server.json`) | [Kajdep/countrycallingcodesmcp](https://github.com/Kajdep/countrycallingcodesmcp) |
+| Agent skill (`SKILL.md`) | [Kajdep/countrycalling-codes-skill](https://github.com/Kajdep/countrycalling-codes-skill) |
+
+`SKILL.md` belongs only in the skill repository. Skill registries index a
+public repo with that file at the root and cannot read this one. Keep this
+repo limited to registry metadata so the two listings do not compete.
+
+Official registry name: `io.github.Kajdep/countrycallingcodesmcp`.
 
 ## Hosted MCP
 
-- MCP endpoint: `https://countrycalling.codes/api/mcp`
+- Endpoint: `https://www.countrycalling.codes/api/mcp`
 - Transport: Streamable HTTP
 - Authentication: none
-- Tool: `lookup_country_calling_code`
-- Website: `https://countrycalling.codes`
-- LLM guide: `https://countrycalling.codes/llms-full.md`
-- Skill manifest: `https://countrycalling.codes/skill.json`
-- OpenAPI schema: `https://countrycalling.codes/api/calling-codes/openapi.json`
+- Protocol: `2025-11-25`
+- Tools: 11 read-only tools (see below)
+- Resources: `countrycalling://capabilities`, `countrycalling://coverage`, and the template `countrycalling://countries/{code}/phone-input`
+- Website: `https://www.countrycalling.codes`
+- Developer docs: `https://www.countrycalling.codes/developers#mcp`
+- LLM guide: `https://www.countrycalling.codes/llms-full.md`
+- Skill manifest: `https://www.countrycalling.codes/skill.json`
+- OpenAPI: `https://www.countrycalling.codes/api/calling-codes/openapi.json`
+- Status: `https://www.countrycalling.codes/api/calling-codes/status`
+- Registry manifest (live): `https://www.countrycalling.codes/server.json`
 
-## What It Does
+The `server.json` in this repository is the same document the website serves
+and the official MCP Registry already publishes as 1.4.0. Registry publication
+is driven from the implementation repo (`.github/workflows/publish-mcp.yml` in
+`v0-countrycallingcodes`), not from this listing.
 
-The MCP server provides read-only lookup access to international telephone
-calling-code reference data:
+## What it does
 
-- Country and territory names
-- ISO 3166-1 alpha-2 and alpha-3 codes
-- E.164 international dial codes
-- Regions and subregions
-- Trunk prefixes where relevant
-- NANP area-code disambiguation where relevant
+Read-only international phone workflows for apps and agents:
 
-## MCP Client Configuration
+- Country and territory calling-code lookup (ISO codes, E.164 dial codes, regions, trunk prefixes, NANP)
+- Phone analysis and ephemeral formatting against versioned numbering metadata
+- Origin-specific dialing instructions for reviewed country pairs
+- Batch normalization (up to 100 records) with duplicate grouping
+- Number comparison, region resolution, form-input hints, and format diagnosis
+- Overlapping calling windows across explicit IANA time zones
 
-For MCP clients that support remote Streamable HTTP servers:
+Every MCP tool has a REST twin that returns the same structured payload. Results
+carry source `evidence` and a `limitations` array. A well-formed number is not
+proof that it is allocated, active, reachable, owned, or consented for contact.
+
+Agent-facing usage rules (when to call which tool, how to treat ambiguity, how
+to clean a CRM column) live in the [skill](https://github.com/Kajdep/countrycalling-codes-skill),
+not here.
+
+## MCP client configuration
+
+For clients that support remote Streamable HTTP servers — this is the same
+config the skill and the live discovery document use:
 
 ```json
 {
   "mcpServers": {
     "country-calling-codes": {
-      "url": "https://countrycalling.codes/api/mcp"
+      "type": "streamable-http",
+      "url": "https://www.countrycalling.codes/api/mcp"
     }
   }
 }
@@ -54,58 +86,91 @@ For clients that require a local stdio bridge, use `mcp-remote`:
       "args": [
         "-y",
         "mcp-remote",
-        "https://countrycalling.codes/api/mcp"
+        "https://www.countrycalling.codes/api/mcp"
       ]
     }
   }
 }
 ```
 
-## Tool
+A ready-to-paste copy is in [`mcp-config.json`](./mcp-config.json).
 
-### `lookup_country_calling_code`
+## Tools
 
-Look up countries and territories by free-text query, ISO code, E.164 dial code,
-or region.
+All tools are annotated `readOnlyHint`, non-destructive, idempotent, and
+closed-world. Phone strings are capped at 64 characters; tool arguments at
+64 KiB; the JSON-RPC envelope at 128 KiB.
 
-Input parameters:
+| MCP tool | REST twin | Purpose |
+| --- | --- | --- |
+| `lookup_country_calling_code` | `GET /api/calling-codes` | Free-text / ISO / dial-code / region lookup across 233 countries and territories. Set `includeExamples` for reviewed patterns. |
+| `format_international_phone_number` | `POST /api/phone/format` | Lighter ephemeral formatter. Prefer `analyze_phone_number` when you need status, checks, candidates, or evidence. |
+| `get_phone_capabilities` | `GET /api/capabilities` | Per-country review status, supported operations, evidence, dataset versions, and request limits. Call this first for an unfamiliar country. |
+| `analyze_phone_number` | `POST /api/phone/analyze` | Strict parse against versioned numbering metadata. National numbers need `numberCountryCode`; exit prefixes need `originCountryCode`. |
+| `get_dialing_instructions` | `POST /api/dialing/instructions` | Origin-specific dial string, steps, and pattern for reviewed country pairs. |
+| `normalize_phone_numbers` | `POST /api/phone/batch` | Up to 100 uniquely identified records, order preserved, per-record errors, optional canonical duplicate grouping. |
+| `compare_phone_numbers` | `POST /api/phone/compare` | Equality after analysis. `extensionPolicy` is `exact` by default; suffix-only matches are never equal. |
+| `resolve_phone_region` | `POST /api/phone/region` | Metadata-backed country candidates or non-geographic classification. Not geolocation or carrier lookup. |
+| `get_phone_input_rules` | `GET /api/countries/{code}/phone-input` | Display placeholders and trunk-prefix guidance. Not a validation mask. |
+| `diagnose_dialing_problem` | `POST /api/phone/diagnose` | Explain a formatting failure and propose a bounded, reviewed prefix repair for confirmation. |
+| `find_calling_windows` | `POST /api/calling-windows` | Overlapping working hours for up to 8 participants, explicit IANA zones, 1–31 days, DST-aware. |
 
-- `q`: free-text search, such as `United Kingdom`, `London`, or `AUS`
-- `code`: ISO 3166-1 alpha-2 or alpha-3 code, such as `GB` or `GBR`
-- `dialCode`: calling code with or without plus sign, such as `+44` or `44`
-- `region`: one of `Africa`, `Americas`, `Asia`, `Europe`, `Oceania`
-- `limit`: maximum results to return, from `1` to `250`
-
-Example tool input:
+Example (`lookup_country_calling_code`):
 
 ```json
 {
-  "code": "GB"
+  "code": "GB",
+  "includeExamples": true
 }
 ```
 
 Expected result includes the United Kingdom record with dial code `+44`.
 
-## Directory Submission Metadata
+Full parameter and response shapes belong in the
+[skill API reference](https://github.com/Kajdep/countrycalling-codes-skill/blob/main/references/api.md)
+and the [hosted OpenAPI](https://www.countrycalling.codes/api/calling-codes/openapi.json).
+Do not fork a third copy of those contracts in this repository.
+
+## Resources
+
+| URI | Contents |
+| --- | --- |
+| `countrycalling://capabilities` | Full capability document (same payload as `GET /api/capabilities`) |
+| `countrycalling://coverage` | Coverage view of the same document |
+| `countrycalling://countries/{code}/phone-input` | Reviewed input rules for one ISO alpha-2 country |
+
+## Coverage and limits
+
+- Numbering metadata: libphonenumber-js 1.13.12, max metadata, 245 countries and territories plus supported non-geographic numbering.
+- Reviewed dialing guides and input examples: AE, AU, BR, CN, DE, FR, GB, IN, IT, JP, SG, US, ZA. Dialing instructions require both origin and destination to be reviewed.
+- Directory dataset: 233 countries and territories.
+- No SMS, calls, HLR/HSS, MNP, carrier lookup, contact mutation, or outbound data submission.
+- Phone-bearing and MCP transport responses are `no-store`. No application-level per-client quota; honour `429` + `Retry-After` if hosting enforces one.
+
+## Directory submission metadata
 
 ```text
 Name: Country Calling Codes
-Description: Read-only MCP server and JSON API for international country calling codes, ISO country codes, E.164 dial codes, regions, trunk prefixes, and NANP area codes.
+Description: Calling codes, phone analysis, dialing guidance, batch normalization and calling windows.
 Category: Data / Search / Reference / API
-Website: https://countrycalling.codes
-MCP URL: https://countrycalling.codes/api/mcp
-OpenAPI URL: https://countrycalling.codes/api/calling-codes/openapi.json
-Skill manifest: https://countrycalling.codes/skill.json
-LLM guide: https://countrycalling.codes/llms-full.md
-GitHub: https://github.com/Kajdep/countrycallingcodesmcp
-Tool: lookup_country_calling_code
+Website: https://www.countrycalling.codes
+MCP URL: https://www.countrycalling.codes/api/mcp
+Registry: io.github.Kajdep/countrycallingcodesmcp
+Version: 1.4.0
+OpenAPI URL: https://www.countrycalling.codes/api/calling-codes/openapi.json
+Skill: https://github.com/Kajdep/countrycalling-codes-skill
+Skill manifest: https://www.countrycalling.codes/skill.json
+LLM guide: https://www.countrycalling.codes/llms-full.md
+Implementation: https://github.com/Kajdep/v0-countrycallingcodes
+GitHub listing: https://github.com/Kajdep/countrycallingcodesmcp
+Tools: 11 (see table above)
 Auth: None
-Cost to user: Free/public read-only lookup
+Cost to user: Free/public read-only lookup and analysis
 ```
 
-## Data and Privacy
+## Data and privacy
 
-This repository contains no private data and no full dataset export. The hosted
-MCP server is read-only and returns public reference data from
-`countrycalling.codes`.
-
+This repository contains no private data and no dataset export. The hosted MCP
+server is read-only. Phone values are processed ephemerally and are not stored
+by the service; MCP clients and third-party gateways may retain their own
+conversation history.
