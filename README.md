@@ -3,9 +3,8 @@
 Metadata-only listing repository for the hosted Country Calling Codes MCP
 server (service **1.4.0**).
 
-T
 
-| Agent skill (`SKILL.md`) | [Kajdep/countrycalling-codes-skill](https://github.com/Kajdep/countrycalling-codes-skill) |
+| Agent skill | [Kajdep/countrycalling-codes-skill](https://github.com/Kajdep/countrycalling-codes-skill) |
 
 Official registry name: `io.github.Kajdep/countrycallingcodesmcp`.
 
