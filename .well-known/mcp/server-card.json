@@ -622,7 +622,7 @@
     "website": "https://www.countrycalling.codes",
     "documentation": "https://www.countrycalling.codes/developers",
     "mcpUrl": "https://www.countrycalling.codes/api/mcp",
-    "registryName": "io.github.Kajdep/countrycallingcodesmcp",
+    "registryName": "codes.countrycalling/countrycallingcodes",
     "llms": "https://www.countrycalling.codes/llms.txt",
     "llmsFull": "https://www.countrycalling.codes/llms-full.md",
     "skillManifest": "https://www.countrycalling.codes/skill.json",
