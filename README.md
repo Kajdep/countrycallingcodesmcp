@@ -6,7 +6,7 @@ server (service **1.4.0**).
 
 | Agent skill | [Kajdep/countrycalling-codes-skill](https://github.com/Kajdep/countrycalling-codes-skill) |
 
-Official registry name: `io.github.Kajdep/countrycallingcodesmcp`.
+Official registry name: `codes.countrycalling/countrycallingcodes`.
 
 ## Hosted MCP
 
@@ -143,7 +143,7 @@ Description: Calling codes, phone analysis, dialing guidance, batch normalizatio
 Category: Data / Search / Reference / API
 Website: https://www.countrycalling.codes
 MCP URL: https://www.countrycalling.codes/api/mcp
-Registry: io.github.Kajdep/countrycallingcodesmcp
+Registry: codes.countrycalling/countrycallingcodes
 Version: 1.4.0
 OpenAPI URL: https://www.countrycalling.codes/api/calling-codes/openapi.json
 Skill: https://github.com/Kajdep/countrycalling-codes-skill

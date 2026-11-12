@@ -1,6 +1,6 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.Kajdep/countrycallingcodesmcp",
+  "name": "codes.countrycalling/countrycallingcodes",
   "title": "Country Calling Codes",
   "description": "Calling codes, phone analysis, dialing guidance, batch normalization and calling windows.",
   "version": "1.4.0",

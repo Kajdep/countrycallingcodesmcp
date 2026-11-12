@@ -3,7 +3,7 @@
   "version": "1.4.0",
   "private": true,
   "description": "Metadata-only listing repository for the hosted Country Calling Codes MCP server (service 1.4.0).",
-  "mcpName": "io.github.Kajdep/countrycallingcodesmcp",
+  "mcpName": "codes.countrycalling/countrycallingcodes",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kajdep/countrycallingcodesmcp.git"
