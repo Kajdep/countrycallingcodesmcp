@@ -24,6 +24,18 @@ Official registry name: `codes.countrycalling/countrycallingcodes`.
 - Status: `https://www.countrycalling.codes/api/calling-codes/status`
 - Registry manifest (live): `https://www.countrycalling.codes/server.json`
 
+## Guides
+
+Reviewed articles on the website that complement the MCP tools:
+
+- [International dialing format (E.164)](https://www.countrycalling.codes/guides/international-dialing-format)
+- [Exit codes and trunk prefixes](https://www.countrycalling.codes/guides/exit-codes-and-trunk-prefixes)
+- [Phone number validation](https://www.countrycalling.codes/guides/phone-number-validation)
+- [Common phone number formatting errors](https://www.countrycalling.codes/guides/common-phone-number-formatting-errors)
+- [Missed-call and wangiri scams](https://www.countrycalling.codes/guides/missed-call-scams)
+
+The full set is at [countrycalling.codes/guides](https://www.countrycalling.codes/guides).
+
 The `server.json` in this repository is the same document the website serves
 and the official MCP Registry already publishes as 1.4.0. Registry publication
 is driven from the implementation repo (`.github/workflows/publish-mcp.yml` in
